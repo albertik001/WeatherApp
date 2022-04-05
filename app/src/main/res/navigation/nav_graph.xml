@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/weatherFragment">
+
+
+    <fragment
+        android:id="@+id/weatherFragment"
+        android:name="com.geektech.weatherapp.ui.WeatherFragments.WeatherFragment"
+        android:label="fragment_weather"
+        tools:layout="@layout/fragment_weather">
+        <argument
+            android:defaultValue="Bishkek"
+            android:name="city"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_weatherFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.geektech.weatherapp.ui.WeatherFragments.searchFragments.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_weatherFragment2"
+            app:destination="@id/weatherFragment" />
+    </fragment>
+</navigation>
