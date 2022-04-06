@@ -3,6 +3,7 @@ package com.geektech.weatherapp.ui.WeatherFragments.searchFragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.geektech.weatherapp.common.OnClick;
 import com.geektech.weatherapp.data.models.Weather;
 import com.geektech.weatherapp.databinding.FragmentSearchBinding;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
 public class SearchFragment extends BaseFragment<FragmentSearchBinding> implements OnClick {
 
@@ -32,7 +34,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding> implemen
     protected void setupOnclick() {
         binding.btnNextSearch.setOnClickListener(view -> {
             String city = binding.editTextCity.getText().toString().trim();
-            controller.navigate(SearchFragmentDirections.actionSearchFragmentToWeatherFragment2());
+            controller.navigate(SearchFragmentDirections.actionSearchFragmentToWeatherFragment2(city));
         });
     }
 

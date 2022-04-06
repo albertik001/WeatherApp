@@ -12,9 +12,10 @@
         android:label="fragment_weather"
         tools:layout="@layout/fragment_weather">
         <argument
-            android:defaultValue="Bishkek"
             android:name="city"
-            app:argType="string" />
+            android:defaultValue="Bishkek"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_weatherFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
@@ -26,6 +27,13 @@
         tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_weatherFragment2"
-            app:destination="@id/weatherFragment" />
+            app:destination="@id/weatherFragment">
+            <argument
+                android:name="city"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+
+
     </fragment>
 </navigation>

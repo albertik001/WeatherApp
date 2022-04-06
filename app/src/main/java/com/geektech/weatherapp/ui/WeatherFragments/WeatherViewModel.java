@@ -26,4 +26,5 @@ public class WeatherViewModel extends ViewModel {
         liveData = repository.getWeather(city);
     }
 
+
 }

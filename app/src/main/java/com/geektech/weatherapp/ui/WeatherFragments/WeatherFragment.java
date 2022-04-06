@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
 import com.geektech.weatherapp.R;
 import com.geektech.weatherapp.base.BaseFragment;
 import com.geektech.weatherapp.common.ResourceWeather;
@@ -35,8 +37,8 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        args = WeatherFragmentArgs.fromBundle(getArguments());
         viewModel = new ViewModelProvider(requireActivity()).get(WeatherViewModel.class);
+        args = WeatherFragmentArgs.fromBundle(getArguments());
     }
 
     @Override
@@ -46,7 +48,6 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
     @Override
     protected void setupViews() {
-
     }
 
     @Override
@@ -104,7 +105,10 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
                 String timeSunrise = String.valueOf(simpleDateFormat.format(timeSunriseLong));
                 String timeSunset = String.valueOf(simpleDateFormats.format(timeSunsetLong));
                 String timeDaytime = String.valueOf(dayTime.format(timeDayTime));
+                String urlImg = "https://openweathermap.org/img/wn/" + mainResponseResource.data.getWeather().get(0).getIcon() + ".png";
                 //END
+                Glide.with(binding.getRoot()).load(urlImg).into(binding.statusImage);
+                binding.nameCountry.setText(mainResponseResource.data.getSys().getCountry() + ","+ mainResponseResource.data.getName());
                 binding.bigTemperature.setText(String.valueOf(temps));
                 binding.percentHumidity.setText(humidity + "%");
                 binding.mBarNumber.setText(mBarFormat + "mBar");
@@ -121,6 +125,6 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
     @Override
     protected void callRequests() {
-        viewModel.getWeather("bishkek");
+        viewModel.getWeather(args.getCity());
     }
 }
