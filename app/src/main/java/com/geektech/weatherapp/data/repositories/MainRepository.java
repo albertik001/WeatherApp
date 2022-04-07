@@ -8,6 +8,8 @@ import com.geektech.weatherapp.data.local.db.daos.ResponseDao;
 import com.geektech.weatherapp.data.remote.apiservices.WeatherApi;
 import com.geektech.weatherapp.data.remote.dto.MainResponse;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import retrofit2.Call;
@@ -49,8 +51,8 @@ public class MainRepository {
     }
 
 
-    public LiveData<MainResponse> getWeather() {
-
+    public LiveData<List<MainResponse>> getWeather() {
+        System.out.println("777");
         return responseDao.getAll();
     }
 

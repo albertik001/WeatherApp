@@ -7,6 +7,8 @@ import androidx.room.Query;
 
 import com.geektech.weatherapp.data.remote.dto.MainResponse;
 
+import java.util.List;
+
 @Dao
 public interface ResponseDao {
 
@@ -14,6 +16,6 @@ public interface ResponseDao {
     void insert(MainResponse mainResponse);
 
     @Query("SELECT * FROM mainresponse")
-    LiveData<MainResponse> getAll();
+    LiveData<List<MainResponse>> getAll();
 
 }

@@ -7,6 +7,8 @@ import com.geektech.weatherapp.common.ResourceWeather;
 import com.geektech.weatherapp.data.remote.dto.MainResponse;
 import com.geektech.weatherapp.data.repositories.MainRepository;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -15,7 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class WeatherViewModel extends ViewModel {
 
     public LiveData<ResourceWeather<MainResponse>> liveData;
-    public LiveData<MainResponse> localLiveData;
+    public LiveData<List<MainResponse>> localLiveData;
     private MainRepository repository;
 
     @Inject
@@ -27,7 +29,7 @@ public class WeatherViewModel extends ViewModel {
         liveData = repository.fetchWeather(city);
     }
 
-    public void getWeather() {
+    public void  getWeather() {
         localLiveData = repository.getWeather();
     }
 

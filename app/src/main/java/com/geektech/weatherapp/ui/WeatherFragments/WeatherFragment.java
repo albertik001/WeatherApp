@@ -22,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -89,15 +90,56 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
                 }
             });
         } else {
-
-            viewModel.localLiveData.observe(getViewLifecycleOwner(), new Observer<MainResponse>() {
+            viewModel.localLiveData.observe(getViewLifecycleOwner(), new Observer<List<MainResponse>>() {
                 @Override
-                public void onChanged(MainResponse mainResponse) {
-                    binds(mainResponseResource);
-                    binding.interFace.setVisibility(View.VISIBLE);
+                public void onChanged(List<MainResponse> mainResponses) {
+                    bindss((MainResponse) mainResponses);
+                    System.out.println("bindes");
+
                 }
             });
         }
+    }
+
+
+    private void bindss(MainResponse mainResponseResource) {
+        System.out.println("bindes");
+        double temp = mainResponseResource.getMain().getTemp();
+        int temps = (int) temp;
+        int humidity = mainResponseResource.getMain().getHumidity();
+        double mBar = mainResponseResource.getMain().getPressure();
+        String mBarFormat = NumberFormat.getNumberInstance(Locale.US).format(mBar);
+        double windSpeed = mainResponseResource.getWind().getSpeed();
+        int windSpeeds = (int) windSpeed;
+        long timeSunriseLong = mainResponseResource.getSys().getSunrise();
+        long timeSunsetLong = mainResponseResource.getSys().getSunset();
+        long timeDayTime = mainResponseResource.getDt();
+        double tempMaxFormat = mainResponseResource.getMain().getTempMax();
+        int tempMax = (int) tempMaxFormat;
+        double tempMinFormat = mainResponseResource.getMain().getTempMin();
+        int tempMin = (int) tempMinFormat;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a", Locale.ROOT);
+        SimpleDateFormat simpleDateFormats = new SimpleDateFormat("HH:mm 'PM'", Locale.ROOT);
+        SimpleDateFormat dayTime = new SimpleDateFormat("HH'h' m'm'", Locale.ROOT);
+        SimpleDateFormat realTimeFormat = new SimpleDateFormat("EEEE, dd MMMM y | HH:mm a", Locale.ROOT);
+        String realTime = String.valueOf(realTimeFormat.format(System.currentTimeMillis()));
+        String timeSunrise = String.valueOf(simpleDateFormat.format(timeSunriseLong));
+        String timeSunset = String.valueOf(simpleDateFormats.format(timeSunsetLong));
+        String timeDaytime = String.valueOf(dayTime.format(timeDayTime));
+        String urlImg = "https://openweathermap.org/img/wn/" + mainResponseResource.fetchWeather().get(0).getIcon() + ".png";
+        //END
+        Glide.with(binding.getRoot()).load(urlImg).into(binding.statusImage);
+        binding.nameCountry.setText(mainResponseResource.getSys().getCountry() + "," + mainResponseResource.getName());
+        binding.bigTemperature.setText(String.valueOf(temps));
+        binding.percentHumidity.setText(humidity + "%");
+        binding.mBarNumber.setText(mBarFormat + "mBar");
+        binding.kmh.setText(windSpeeds + "km/h");
+        binding.timeSunrise.setText(timeSunrise);
+        binding.timeSunset.setText(timeSunset);
+        binding.timeDaytime.setText(timeDaytime);
+        binding.smallTemperature.setText(String.valueOf(tempMax));
+        binding.smallTemperatureBottom.setText(String.valueOf(tempMin));
+        binding.textTime.setText(realTime);
     }
 
     @SuppressLint("SetTextI18n")

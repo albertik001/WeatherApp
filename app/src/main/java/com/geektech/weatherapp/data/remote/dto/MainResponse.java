@@ -11,6 +11,17 @@ import java.util.List;
 @Entity
 public class MainResponse {
 
+    @PrimaryKey(autoGenerate = true)
+    private int idDao;
+
+    public int getIdDao() {
+        return idDao;
+    }
+
+    public void setIdDao(int idDao) {
+        this.idDao = idDao;
+    }
+
     @SerializedName("coord")
     @Expose
     private Coord coord;
@@ -41,7 +52,6 @@ public class MainResponse {
     @SerializedName("timezone")
     @Expose
     private Integer timezone;
-    @PrimaryKey(autoGenerate = false)
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -130,6 +140,10 @@ public class MainResponse {
 
     public void setTimezone(Integer timezone) {
         this.timezone = timezone;
+    }
+
+    public List<Weather> getWeather() {
+        return weather;
     }
 
     public Integer getId() {
