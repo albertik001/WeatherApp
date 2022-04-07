@@ -95,7 +95,6 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
                 public void onChanged(List<MainResponse> mainResponses) {
                     bindss((MainResponse) mainResponses);
                     System.out.println("bindes");
-
                 }
             });
         }
