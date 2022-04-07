@@ -1,10 +1,14 @@
-package com.geektech.weatherapp.data.models;
+package com.geektech.weatherapp.data.remote.dto;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity
 public class MainResponse {
 
     @SerializedName("coord")
@@ -37,6 +41,7 @@ public class MainResponse {
     @SerializedName("timezone")
     @Expose
     private Integer timezone;
+    @PrimaryKey(autoGenerate = false)
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -55,7 +60,7 @@ public class MainResponse {
         this.coord = coord;
     }
 
-    public List<Weather> getWeather() {
+    public List<Weather> fetchWeather() {
         return weather;
     }
 

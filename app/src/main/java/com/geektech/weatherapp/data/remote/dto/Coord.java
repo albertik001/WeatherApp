@@ -1,4 +1,4 @@
-package com.geektech.weatherapp.data.models;
+package com.geektech.weatherapp.data.remote.dto;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

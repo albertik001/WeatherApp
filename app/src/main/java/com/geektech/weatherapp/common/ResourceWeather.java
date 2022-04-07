@@ -16,14 +16,15 @@ public class ResourceWeather<T> {
         this.msg = msg;
     }
 
-    public static <T> ResourceWeather<T> success(@NonNull T data){
+    public static <T> ResourceWeather<T> success(@NonNull T data) {
         return new ResourceWeather<>(Status.SUCCESS, data, null);
     }
 
-    public static <T> ResourceWeather<T> error(String msg, @Nullable T data){
+    public static <T> ResourceWeather<T> error(String msg, @Nullable T data) {
         return new ResourceWeather<>(Status.ERROR, data, msg);
     }
-    public static <T> ResourceWeather<T> loading(){
+
+    public static <T> ResourceWeather<T> loading() {
         return new ResourceWeather<>(Status.LOADING, null, null);
     }
 }

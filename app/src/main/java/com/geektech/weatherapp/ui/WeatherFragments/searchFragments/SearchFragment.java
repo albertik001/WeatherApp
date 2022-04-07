@@ -1,22 +1,8 @@
 package com.geektech.weatherapp.ui.WeatherFragments.searchFragments;
 
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.geektech.weatherapp.R;
 import com.geektech.weatherapp.base.BaseFragment;
 import com.geektech.weatherapp.common.OnClick;
-import com.geektech.weatherapp.data.models.Weather;
 import com.geektech.weatherapp.databinding.FragmentSearchBinding;
-
-import dagger.hilt.android.AndroidEntryPoint;
 
 public class SearchFragment extends BaseFragment<FragmentSearchBinding> implements OnClick {
 

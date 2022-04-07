@@ -1,10 +1,12 @@
 package com.geektech.weatherapp.data.repositories;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.geektech.weatherapp.common.ResourceWeather;
-import com.geektech.weatherapp.data.models.MainResponse;
-import com.geektech.weatherapp.data.remote.WeatherApi;
+import com.geektech.weatherapp.data.local.db.daos.ResponseDao;
+import com.geektech.weatherapp.data.remote.apiservices.WeatherApi;
+import com.geektech.weatherapp.data.remote.dto.MainResponse;
 
 import javax.inject.Inject;
 
@@ -14,20 +16,25 @@ import retrofit2.Response;
 
 public class MainRepository {
     private WeatherApi api;
+    private ResponseDao responseDao;
+
 
     @Inject
-    public MainRepository(WeatherApi api) {
+    public MainRepository(WeatherApi api, ResponseDao responseDao) {
         this.api = api;
+        this.responseDao = responseDao;
     }
 
-    public MutableLiveData<ResourceWeather<MainResponse>> getWeather(String city) {
+
+    public MutableLiveData<ResourceWeather<MainResponse>> fetchWeather(String city) {
         MutableLiveData<ResourceWeather<MainResponse>> liveData = new MutableLiveData<>();
         liveData.postValue(ResourceWeather.loading());
-        api.getWeather(city, "f4094b2bcf523dcedd8d8ece45efc459", "metric").enqueue(new Callback<MainResponse>() {
+        api.fetchWeather(city, "f4094b2bcf523dcedd8d8ece45efc459", "metric").enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     liveData.setValue(ResourceWeather.success(response.body()));
+                    responseDao.insert(response.body());
                 } else {
                     liveData.setValue(ResourceWeather.error(response.message(), null));
                 }
@@ -40,4 +47,11 @@ public class MainRepository {
         });
         return liveData;
     }
+
+
+    public LiveData<MainResponse> getWeather() {
+
+        return responseDao.getAll();
+    }
+
 }

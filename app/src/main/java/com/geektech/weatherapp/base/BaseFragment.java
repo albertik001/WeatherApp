@@ -17,8 +17,9 @@ import com.geektech.weatherapp.R;
 public abstract class BaseFragment<VB extends ViewBinding> extends Fragment {
 
     public VB binding;
-    public abstract VB bind();
     public NavController controller;
+
+    public abstract VB bind();
 
     @Nullable
     @Override
@@ -38,8 +39,11 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment {
     }
 
     protected abstract void setupViews();
+
     protected abstract void setupOnclick();
+
     protected abstract void setupObservers();
+
     protected abstract void callRequests();
 }
 

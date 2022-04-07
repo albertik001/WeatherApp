@@ -7,10 +7,6 @@
     tools:context=".ui.WeatherFragments.searchFragments.SearchFragment">
 
     <EditText
-        android:ellipsize="end"
-        android:inputType="text"
-        android:maxLines="1"
-        android:hint="Enter city"
         android:id="@+id/edit_text_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,6 +14,10 @@
         android:layout_marginBottom="160dp"
         android:background="@drawable/edit_text_rectangle"
         android:backgroundTint="@color/gray"
+        android:ellipsize="end"
+        android:hint="Enter city"
+        android:inputType="text"
+        android:maxLines="1"
         android:padding="12dp"
         android:textColor="@color/black"
         android:textSize="20sp"

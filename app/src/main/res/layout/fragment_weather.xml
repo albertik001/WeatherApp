@@ -45,9 +45,9 @@
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:fontFamily="@font/barlow"
-                android:textSize="@dimen/_10ssp"
                 android:text="Sunday, 19 May 2019  |  4:30PM"
                 android:textColor="@color/black"
+                android:textSize="@dimen/_10ssp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,8 +70,8 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/blue_view"
-                app:layout_constraintStart_toStartOf="@id/blue_view"
                 app:layout_constraintEnd_toEndOf="@id/blue_view"
+                app:layout_constraintStart_toStartOf="@id/blue_view"
                 app:layout_constraintTop_toTopOf="@id/blue_view" />
 
             <View
@@ -85,12 +85,12 @@
                 app:layout_constraintTop_toTopOf="@id/name_country" />
 
             <TextView
-                android:text="33"
                 android:id="@+id/big_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:fontFamily="@font/barlow"
+                android:text="33"
                 android:textColor="@color/black"
                 android:textSize="64dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -110,11 +110,11 @@
                 android:id="@+id/status_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                tools:background="@drawable/sunny_status"
                 app:layout_constraintBottom_toBottomOf="@id/big_temperature"
                 app:layout_constraintEnd_toStartOf="@id/big_temperature"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/big_temperature" />
+                app:layout_constraintTop_toTopOf="@id/big_temperature"
+                tools:background="@drawable/sunny_status" />
 
             <TextView
                 android:id="@+id/weather_status"
