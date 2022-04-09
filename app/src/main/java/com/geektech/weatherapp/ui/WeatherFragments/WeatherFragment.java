@@ -62,18 +62,18 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
     @Override
     protected void setupObservers() {
         sendRequest();
-
     }
 
 
     private void sendRequest() {
         if (isNetworkAvailable()) {
+            binding.interFace.setVisibility(View.INVISIBLE);
             viewModel.liveData.observe(getViewLifecycleOwner(), new Observer<ResourceWeather<MainResponse>>() {
                 @Override
                 public void onChanged(ResourceWeather<MainResponse> mainResponseResource) {
                     switch (mainResponseResource.status) {
                         case SUCCESS: {
-                            binds(mainResponseResource);
+                            networkBind(mainResponseResource);
                             binding.interFace.setVisibility(View.VISIBLE);
                             break;
                         }
@@ -90,19 +90,18 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
                 }
             });
         } else {
+            binding.interFace.setVisibility(View.INVISIBLE);
             viewModel.localLiveData.observe(getViewLifecycleOwner(), new Observer<List<MainResponse>>() {
                 @Override
                 public void onChanged(List<MainResponse> mainResponses) {
-                    bindss((MainResponse) mainResponses);
-                    System.out.println("bindes");
+                    localBind(mainResponses.get(mainResponses.size() - 1));
+                    binding.interFace.setVisibility(View.VISIBLE);
                 }
             });
         }
     }
-
-
-    private void bindss(MainResponse mainResponseResource) {
-        System.out.println("bindes");
+    @SuppressLint("SetTextI18n")
+    private void localBind (MainResponse mainResponseResource) {
         double temp = mainResponseResource.getMain().getTemp();
         int temps = (int) temp;
         int humidity = mainResponseResource.getMain().getHumidity();
@@ -142,7 +141,7 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
     }
 
     @SuppressLint("SetTextI18n")
-    private void binds(ResourceWeather<MainResponse> mainResponseResource) {
+    private void networkBind(ResourceWeather<MainResponse> mainResponseResource) {
         //FORMAT DATA
         double temp = mainResponseResource.data.getMain().getTemp();
         int temps = (int) temp;
@@ -181,7 +180,6 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
         binding.smallTemperatureBottom.setText(String.valueOf(tempMin));
         binding.textTime.setText(realTime);
     }
-
 
     @Override
     protected void callRequests() {

@@ -1,4 +1,4 @@
-package com.geektech.weatherapp.data.local.db;
+package com.geektech.weatherapp.data.local.db.room;
 
 import android.content.Context;
 
@@ -12,7 +12,7 @@ import javax.inject.Inject;
 public class RoomClient {
     private static AppDatabase appDatabase;
 
-    @Inject
+
     public RoomClient() {
 
     }
@@ -26,5 +26,4 @@ public class RoomClient {
     public static ResponseDao provideDao(AppDatabase appDatabase) {
         return appDatabase.responseDao();
     }
-
 }

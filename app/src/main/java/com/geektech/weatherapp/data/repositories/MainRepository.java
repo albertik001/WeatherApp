@@ -19,6 +19,8 @@ import retrofit2.Response;
 public class MainRepository {
     private WeatherApi api;
     private ResponseDao responseDao;
+    private static final String API_KEY = "f4094b2bcf523dcedd8d8ece45efc459";
+    private static final String UNITS = "metric";
 
 
     @Inject
@@ -31,7 +33,7 @@ public class MainRepository {
     public MutableLiveData<ResourceWeather<MainResponse>> fetchWeather(String city) {
         MutableLiveData<ResourceWeather<MainResponse>> liveData = new MutableLiveData<>();
         liveData.postValue(ResourceWeather.loading());
-        api.fetchWeather(city, "f4094b2bcf523dcedd8d8ece45efc459", "metric").enqueue(new Callback<MainResponse>() {
+        api.fetchWeather(city, API_KEY, UNITS).enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -52,7 +54,6 @@ public class MainRepository {
 
 
     public LiveData<List<MainResponse>> getWeather() {
-        System.out.println("777");
         return responseDao.getAll();
     }
 

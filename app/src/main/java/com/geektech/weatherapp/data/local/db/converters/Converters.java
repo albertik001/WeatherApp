@@ -23,7 +23,6 @@ public class Converters {
     }
 
     @TypeConverter
-
     public static Sys jsonToSys(String value) {
         return new Gson().fromJson(value, Sys.class);
     }
