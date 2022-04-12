@@ -52,6 +52,27 @@ public class MainRepository {
         return liveData;
     }
 
+    public MutableLiveData<ResourceWeather<MainResponse>> fetchWeatherLatLon(double lat, double lon) {
+        MutableLiveData<ResourceWeather<MainResponse>> liveData = new MutableLiveData<>();
+        liveData.postValue(ResourceWeather.loading());
+        api.fetchWeatherLatLon(lat, lon, API_KEY, UNITS).enqueue(new Callback<MainResponse>() {
+            @Override
+            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    liveData.setValue(ResourceWeather.success(response.body()));
+                    responseDao.insert(response.body());
+                } else {
+                    liveData.setValue(ResourceWeather.error(response.message(), null));
+                }
+            }
+            @Override
+            public void onFailure(Call<MainResponse> call, Throwable t) {
+                liveData.setValue(ResourceWeather.error(t.getLocalizedMessage(), null));
+            }
+        });
+        return liveData;
+    }
+
 
     public LiveData<List<MainResponse>> getWeather() {
         return responseDao.getAll();

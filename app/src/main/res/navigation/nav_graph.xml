@@ -8,32 +8,63 @@
 
     <fragment
         android:id="@+id/weatherFragment"
-        android:name="com.geektech.weatherapp.ui.WeatherFragments.WeatherFragment"
+        android:name="com.geektech.weatherapp.ui.weatherFragments.WeatherFragment"
         android:label="fragment_weather"
         tools:layout="@layout/fragment_weather">
-        <argument
+        <!--<argument
             android:name="city"
             android:defaultValue="Bishkek"
             app:argType="string"
+            app:nullable="true" />-->
+        <argument
+            android:defaultValue="false"
+            android:name="lat"
+            app:argType="double"
+            app:nullable="true" />
+        <argument
+            android:defaultValue="false"
+            android:name="lon"
+            app:argType="double"
             app:nullable="true" />
         <action
             android:id="@+id/action_weatherFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_weatherFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.geektech.weatherapp.ui.WeatherFragments.searchFragments.SearchFragment"
+        android:name="com.geektech.weatherapp.ui.weatherFragments.searchFragments.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_weatherFragment2"
             app:destination="@id/weatherFragment">
-            <argument
+            <!--<argument
                 android:name="city"
                 app:argType="string"
-                app:nullable="false" />
+                app:nullable="false" />-->
         </action>
 
 
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.geektech.weatherapp.ui.googlemap.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map">
+        <action
+            android:id="@+id/action_mapFragment_to_weatherFragment"
+            app:destination="@id/weatherFragment">
+            <argument
+                android:name="lat"
+                app:argType="double"
+                app:nullable="false" />
+            <argument
+                android:name="lon"
+                app:argType="double"
+                app:nullable="false" />
+        </action>
     </fragment>
 </navigation>

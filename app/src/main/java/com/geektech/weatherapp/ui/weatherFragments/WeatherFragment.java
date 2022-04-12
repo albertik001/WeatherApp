@@ -1,4 +1,4 @@
-package com.geektech.weatherapp.ui.WeatherFragments;
+package com.geektech.weatherapp.ui.weatherFragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,7 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
-    private WeatherFragmentArgs args;
+    private @NonNull WeatherFragmentArgs args;
     private WeatherViewModel viewModel;
 
     public WeatherFragment() {
@@ -56,6 +57,10 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
     protected void setupOnclick() {
         binding.nameCountry.setOnClickListener(view -> {
             controller.navigate(R.id.action_weatherFragment_to_searchFragment);
+        });
+        binding.nameCountry.setOnLongClickListener(view -> {
+            controller.navigate(R.id.mapFragment);
+            return false;
         });
     }
 
@@ -183,7 +188,7 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
     @Override
     protected void callRequests() {
-        viewModel.fetchWeather(args.getCity());
+        viewModel.fetchWeatherLatLon(args.getLat(), args.getLon());
         viewModel.getWeather();
     }
 

@@ -10,4 +10,7 @@ public interface WeatherApi {
 
     @GET("/data/2.5/weather")
     Call<MainResponse> fetchWeather(@Query("q") String name, @Query("appid") String id, @Query("units") String units);
+
+    @GET("/data/2.5/weather")
+    Call<MainResponse> fetchWeatherLatLon(@Query("lat") double lat, @Query("lon") double lon,@Query("appid") String id, @Query("units") String units);
 }

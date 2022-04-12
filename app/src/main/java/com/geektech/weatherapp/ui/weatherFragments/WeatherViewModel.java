@@ -1,4 +1,4 @@
-package com.geektech.weatherapp.ui.WeatherFragments;
+package com.geektech.weatherapp.ui.weatherFragments;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -27,6 +27,10 @@ public class WeatherViewModel extends ViewModel {
 
     public void fetchWeather(String city) {
         liveData = repository.fetchWeather(city);
+    }
+
+    public void fetchWeatherLatLon(double lat, double lon){
+        liveData = repository.fetchWeatherLatLon(lat, lon);
     }
 
     public void  getWeather() {

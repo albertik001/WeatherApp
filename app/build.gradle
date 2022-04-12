@@ -30,6 +30,12 @@ android {
     viewBinding {
         enabled true
     }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -64,9 +70,13 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
     // Room
-    def room_version = "2.4.1"
+    def room_version = "2.4.2"
+    //noinspection GradleDependency
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+    //Google Map
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+
 
 
 }

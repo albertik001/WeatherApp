@@ -16,7 +16,6 @@ import java.util.List;
 
 public class Converters {
 
-
     @TypeConverter
     public static String sysToJson(Sys sys) {
         return new Gson().toJson(sys);

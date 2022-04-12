@@ -1,4 +1,4 @@
-package com.geektech.weatherapp.ui.WeatherFragments.searchFragments;
+package com.geektech.weatherapp.ui.weatherFragments.searchFragments;
 
 import com.geektech.weatherapp.base.BaseFragment;
 import com.geektech.weatherapp.common.OnClick;
@@ -20,7 +20,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding> implemen
     protected void setupOnclick() {
         binding.btnNextSearch.setOnClickListener(view -> {
             String city = binding.editTextCity.getText().toString().trim();
-            controller.navigate(SearchFragmentDirections.actionSearchFragmentToWeatherFragment2(city));
         });
     }
 
