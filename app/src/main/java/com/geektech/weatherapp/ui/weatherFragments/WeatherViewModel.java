@@ -29,7 +29,7 @@ public class WeatherViewModel extends ViewModel {
         liveData = repository.fetchWeather(city);
     }
 
-    public void fetchWeatherLatLon(double lat, double lon){
+    public void fetchWeatherLatLon(String lat, String lon){
         liveData = repository.fetchWeatherLatLon(lat, lon);
     }
 

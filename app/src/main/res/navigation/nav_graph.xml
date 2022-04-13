@@ -17,14 +17,14 @@
             app:argType="string"
             app:nullable="true" />-->
         <argument
-            android:defaultValue="false"
+            android:defaultValue=""
             android:name="lat"
-            app:argType="double"
+            app:argType="string"
             app:nullable="true" />
         <argument
-            android:defaultValue="false"
+            android:defaultValue=""
             android:name="lon"
-            app:argType="double"
+            app:argType="string"
             app:nullable="true" />
         <action
             android:id="@+id/action_weatherFragment_to_searchFragment"
@@ -59,11 +59,11 @@
             app:destination="@id/weatherFragment">
             <argument
                 android:name="lat"
-                app:argType="double"
+                app:argType="string"
                 app:nullable="false" />
             <argument
                 android:name="lon"
-                app:argType="double"
+                app:argType="string"
                 app:nullable="false" />
         </action>
     </fragment>

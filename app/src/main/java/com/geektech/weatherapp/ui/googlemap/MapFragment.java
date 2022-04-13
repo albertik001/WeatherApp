@@ -125,8 +125,8 @@ public class MapFragment extends BaseFragment<FragmentMapBinding> implements OnM
                 @Override
                 public void onInfoWindowClick(@NonNull Marker marker) {
                     Toast.makeText(requireContext(), "Salam", Toast.LENGTH_SHORT).show();
-                    double a = marker.getPosition().latitude;
-                    double b = marker.getPosition().longitude;
+                    String a = String.valueOf(marker.getPosition().latitude);
+                    String b = String.valueOf(marker.getPosition().longitude);
                     controller.navigate(MapFragmentDirections.actionMapFragmentToWeatherFragment(a, b));
                 }
             });

@@ -52,7 +52,7 @@ public class MainRepository {
         return liveData;
     }
 
-    public MutableLiveData<ResourceWeather<MainResponse>> fetchWeatherLatLon(double lat, double lon) {
+    public MutableLiveData<ResourceWeather<MainResponse>> fetchWeatherLatLon(String lat, String lon) {
         MutableLiveData<ResourceWeather<MainResponse>> liveData = new MutableLiveData<>();
         liveData.postValue(ResourceWeather.loading());
         api.fetchWeatherLatLon(lat, lon, API_KEY, UNITS).enqueue(new Callback<MainResponse>() {

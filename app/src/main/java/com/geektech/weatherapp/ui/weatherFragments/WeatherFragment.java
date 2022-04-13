@@ -1,14 +1,20 @@
 package com.geektech.weatherapp.ui.weatherFragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -31,8 +37,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
-    private @NonNull WeatherFragmentArgs args;
-    private WeatherViewModel viewModel;
+    private String lat, getLat;
+    private String lon, getLon;
+    private WeatherFragmentArgs args;
+    private LocationManager locationManager;
+    public static WeatherViewModel viewModel;
 
     public WeatherFragment() {
     }
@@ -51,6 +60,20 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
     @Override
     protected void setupViews() {
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            Criteria criteria = new Criteria();
+            locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+            String bestProvider = locationManager.getBestProvider(criteria, true);
+            Location location = locationManager.getLastKnownLocation(bestProvider);
+            if (location != null) {
+                lon = String.valueOf(location.getLongitude());
+                lat = String.valueOf(location.getLatitude());
+                Toast.makeText(requireContext(), "" + location.getLatitude() + " " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -105,8 +128,9 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
             });
         }
     }
+
     @SuppressLint("SetTextI18n")
-    private void localBind (MainResponse mainResponseResource) {
+    private void localBind(MainResponse mainResponseResource) {
         double temp = mainResponseResource.getMain().getTemp();
         int temps = (int) temp;
         int humidity = mainResponseResource.getMain().getHumidity();
@@ -188,8 +212,13 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
     @Override
     protected void callRequests() {
-        viewModel.fetchWeatherLatLon(args.getLat(), args.getLon());
-        viewModel.getWeather();
+        getLon = String.valueOf(args.getLon());
+        getLat = String.valueOf(args.getLat());
+        if (getLat != null) {
+            viewModel.fetchWeatherLatLon(getLat, getLon);
+        }else {
+            viewModel.fetchWeatherLatLon(lat,lon);
+        }
     }
 
     private boolean isNetworkAvailable() {
@@ -198,4 +227,6 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
 }
+
