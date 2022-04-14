@@ -11,17 +11,16 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.geektech.weatherapp.R;
 import com.geektech.weatherapp.base.BaseFragment;
 import com.geektech.weatherapp.common.ResourceWeather;
+import com.geektech.weatherapp.data.local.db.prefs.Prefs;
 import com.geektech.weatherapp.data.remote.dto.MainResponse;
 import com.geektech.weatherapp.databinding.FragmentWeatherBinding;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -29,7 +28,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -37,10 +35,10 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
-    private String lat, getLat;
-    private String lon, getLon;
+    private Prefs prefs;
+    private String lat;
+    private String lon;
     private WeatherFragmentArgs args;
-    private LocationManager locationManager;
     public static WeatherViewModel viewModel;
 
     public WeatherFragment() {
@@ -49,8 +47,30 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initCreate();
+        definitionAtStartUp();
+    }
+
+    private void initCreate() {
+        prefs = new Prefs(requireActivity());
         viewModel = new ViewModelProvider(requireActivity()).get(WeatherViewModel.class);
         args = WeatherFragmentArgs.fromBundle(getArguments());
+    }
+
+    private void definitionAtStartUp() {
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            Criteria criteria = new Criteria();
+            LocationManager locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+            String bestProvider = locationManager.getBestProvider(criteria, true);
+            Location location = locationManager.getLastKnownLocation(bestProvider);
+            if (location != null) {
+                lon = String.valueOf(location.getLongitude());
+                lat = String.valueOf(location.getLatitude());
+            }
+        }
     }
 
     @Override
@@ -60,27 +80,11 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
     @Override
     protected void setupViews() {
-        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            Criteria criteria = new Criteria();
-            locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
-            String bestProvider = locationManager.getBestProvider(criteria, true);
-            Location location = locationManager.getLastKnownLocation(bestProvider);
-            if (location != null) {
-                lon = String.valueOf(location.getLongitude());
-                lat = String.valueOf(location.getLatitude());
-                Toast.makeText(requireContext(), "" + location.getLatitude() + " " + location.getLongitude(), Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     @Override
     protected void setupOnclick() {
-        binding.nameCountry.setOnClickListener(view -> {
-            controller.navigate(R.id.action_weatherFragment_to_searchFragment);
-        });
+        binding.nameCountry.setOnClickListener(view -> controller.navigate(R.id.action_weatherFragment_to_searchFragment));
         binding.nameCountry.setOnLongClickListener(view -> {
             controller.navigate(R.id.mapFragment);
             return false;
@@ -96,35 +100,29 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
     private void sendRequest() {
         if (isNetworkAvailable()) {
             binding.interFace.setVisibility(View.INVISIBLE);
-            viewModel.liveData.observe(getViewLifecycleOwner(), new Observer<ResourceWeather<MainResponse>>() {
-                @Override
-                public void onChanged(ResourceWeather<MainResponse> mainResponseResource) {
-                    switch (mainResponseResource.status) {
-                        case SUCCESS: {
-                            networkBind(mainResponseResource);
-                            binding.interFace.setVisibility(View.VISIBLE);
-                            break;
-                        }
-                        case ERROR: {
-                            Snackbar.make(binding.getRoot(), mainResponseResource.msg, BaseTransientBottomBar.LENGTH_LONG).show();
-                            binding.interFace.setVisibility(View.INVISIBLE);
-                            break;
-                        }
-                        case LOADING: {
-                            binding.interFace.setVisibility(View.INVISIBLE);
-                            break;
-                        }
+            viewModel.liveData.observe(getViewLifecycleOwner(), mainResponseResource -> {
+                switch (mainResponseResource.status) {
+                    case SUCCESS: {
+                        networkBind(mainResponseResource);
+                        binding.interFace.setVisibility(View.VISIBLE);
+                        break;
+                    }
+                    case ERROR: {
+                        Snackbar.make(binding.getRoot(), mainResponseResource.msg, BaseTransientBottomBar.LENGTH_LONG).show();
+                        binding.interFace.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    case LOADING: {
+                        binding.interFace.setVisibility(View.INVISIBLE);
+                        break;
                     }
                 }
             });
         } else {
             binding.interFace.setVisibility(View.INVISIBLE);
-            viewModel.localLiveData.observe(getViewLifecycleOwner(), new Observer<List<MainResponse>>() {
-                @Override
-                public void onChanged(List<MainResponse> mainResponses) {
-                    localBind(mainResponses.get(mainResponses.size() - 1));
-                    binding.interFace.setVisibility(View.VISIBLE);
-                }
+            viewModel.localLiveData.observe(getViewLifecycleOwner(), mainResponses -> {
+                localBind(mainResponses.get(mainResponses.size() - 1));
+                binding.interFace.setVisibility(View.VISIBLE);
             });
         }
     }
@@ -212,13 +210,13 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
     @Override
     protected void callRequests() {
-        getLon = String.valueOf(args.getLon());
-        getLat = String.valueOf(args.getLat());
-        if (getLat != null) {
-            viewModel.fetchWeatherLatLon(getLat, getLon);
-        }else {
-            viewModel.fetchWeatherLatLon(lat,lon);
+        if (!prefs.isOneState() && !lat.isEmpty()) {
+            viewModel.fetchWeatherLatLon(lat, lon);
+            prefs.saveOneState();
+        } else if (!args.getLat().isEmpty()) {
+            viewModel.fetchWeatherLatLon(args.getLat(), args.getLon());
         }
+        viewModel.getWeather();
     }
 
     private boolean isNetworkAvailable() {
