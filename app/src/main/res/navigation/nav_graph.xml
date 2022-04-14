@@ -17,21 +17,28 @@
             app:argType="string"
             app:nullable="true" />-->
         <argument
-            android:defaultValue=""
             android:name="lat"
+            android:defaultValue=""
             app:argType="string"
             app:nullable="true" />
         <argument
-            android:defaultValue=""
             android:name="lon"
+            android:defaultValue=""
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:defaultValue="0"
+            android:name="position"
+            app:argType="integer" />
         <action
             android:id="@+id/action_weatherFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
         <action
             android:id="@+id/action_weatherFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_weatherFragment_to_listSaveSityFragment"
+            app:destination="@id/listSaveCityFragment"/>
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -64,6 +71,20 @@
             <argument
                 android:name="lon"
                 app:argType="string"
+                app:nullable="false" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/listSaveCityFragment"
+        android:name="com.geektech.weatherapp.ui.listsavecity.ListSaveCityFragment"
+        android:label="fragment_list_save_sity"
+        tools:layout="@layout/fragment_list_save_sity">
+        <action
+            android:id="@+id/action_listSaveSityFragment_to_weatherFragment"
+            app:destination="@id/weatherFragment">
+            <argument
+                android:name="position"
+                app:argType="integer"
                 app:nullable="false" />
         </action>
     </fragment>

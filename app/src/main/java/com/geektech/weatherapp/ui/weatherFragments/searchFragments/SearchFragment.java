@@ -34,7 +34,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding> implemen
     }
 
     @Override
-    public void click(Object data) {
+    public void click(int data) {
 
     }
 }

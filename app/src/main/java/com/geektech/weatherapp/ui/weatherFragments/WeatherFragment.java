@@ -84,11 +84,12 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
     @Override
     protected void setupOnclick() {
-        binding.nameCountry.setOnClickListener(view -> controller.navigate(R.id.action_weatherFragment_to_searchFragment));
+        binding.nameCountry.setOnClickListener(view -> controller.navigate(R.id.listSaveSityFragment));
         binding.nameCountry.setOnLongClickListener(view -> {
             controller.navigate(R.id.mapFragment);
             return false;
         });
+
     }
 
     @Override
@@ -119,13 +120,21 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
                 }
             });
         } else {
-            binding.interFace.setVisibility(View.INVISIBLE);
-            viewModel.localLiveData.observe(getViewLifecycleOwner(), mainResponses -> {
-                localBind(mainResponses.get(mainResponses.size() - 1));
-                binding.interFace.setVisibility(View.VISIBLE);
-            });
+            roomBind();
+        }
+        if (args.getPosition() > 0) {
+            roomBind();
         }
     }
+
+    private void roomBind() {
+        binding.interFace.setVisibility(View.INVISIBLE);
+        viewModel.localLiveData.observe(getViewLifecycleOwner(), mainResponses -> {
+            localBind(mainResponses.get(args.getPosition() - 1));
+            binding.interFace.setVisibility(View.VISIBLE);
+        });
+    }
+
 
     @SuppressLint("SetTextI18n")
     private void localBind(MainResponse mainResponseResource) {
@@ -210,13 +219,20 @@ public class WeatherFragment extends BaseFragment<FragmentWeatherBinding> {
 
     @Override
     protected void callRequests() {
-        if (!prefs.isOneState() && !lat.isEmpty()) {
-            viewModel.fetchWeatherLatLon(lat, lon);
-            prefs.saveOneState();
-        } else if (!args.getLat().isEmpty()) {
-            viewModel.fetchWeatherLatLon(args.getLat(), args.getLon());
+        if (args.getPosition() > 0) {
+            viewModel.getWeather();
+        } else {
+            if (!prefs.isOneState() && !lat.isEmpty()) {
+                viewModel.fetchWeatherLatLon(lat, lon);
+                prefs.saveOneState();
+            } else if (!args.getLat().isEmpty()) {
+                viewModel.fetchWeatherLatLon(args.getLat(), args.getLon());
+            } else {
+                viewModel.getWeather();
+            }
         }
-        viewModel.getWeather();
+
+
     }
 
     private boolean isNetworkAvailable() {
